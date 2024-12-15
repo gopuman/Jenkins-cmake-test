@@ -1,17 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        PATH = "/usr/bin:$PATH" // Replace "/usr/bin" with the directory where cmake is installed
+    }
+
     stages {
-        stage('Install CMake') {
-            steps {
-                sh '''
-                # Download and extract CMake using curl
-                curl -LO https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-x86_64.tar.gz
-                tar -xvf cmake-3.26.4-linux-x86_64.tar.gz
-                export PATH=$PWD/cmake-3.26.4-linux-x86_64/bin:$PATH
-                '''
-            }
-        }
         stage('Checkout Code') {
             steps {
                 git 'https://github.com/gopuman/Jenkins-cmake-test'
