@@ -2,15 +2,23 @@ pipeline {
     agent any
 
     stages {
+        stage('Install CMake') {
+            steps {
+                sh '''
+                # Download and extract CMake
+                wget https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-x86_64.tar.gz
+                tar -xvf cmake-3.26.4-linux-x86_64.tar.gz
+                export PATH=$PWD/cmake-3.26.4-linux-x86_64/bin:$PATH
+                '''
+            }
+        }
         stage('Checkout Code') {
             steps {
-                // Checkout code from Git
-                git 'https://github.com/gopuman/Jenkins-cmake-test/'
+                git 'https://github.com/gopuman/Jenkins-cmake-test'
             }
         }
         stage('Configure and Build') {
             steps {
-                // Run CMake and make
                 sh '''
                 mkdir -p build
                 cd build
@@ -21,7 +29,6 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                // Run ctest
                 sh '''
                 cd build
                 ctest --verbose
@@ -30,11 +37,7 @@ pipeline {
         }
         stage('Archive Artifacts') {
             steps {
-                // Archive build artifacts
                 archiveArtifacts artifacts: 'build/**', fingerprint: true
-
-                // Publish test results (if XML is available)
-                junit 'build/Testing/**/*.xml'
             }
         }
     }
