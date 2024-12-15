@@ -2,23 +2,31 @@ pipeline {
     agent any
 
     environment {
-        PATH = "$WORKSPACE/cmake-3.26.4-linux-x86_64/bin:$PATH"
+        PATH = "$WORKSPACE/cmake-bin:$PATH"
     }
 
     stages {
-        stage('Install CMake') {
+        stage('Install CMake from Source') {
             steps {
                 sh '''
-                # Download and extract CMake
-                echo "Installing CMake..."
-                curl -LO https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-x86_64.tar.gz
-                tar -xvf cmake-3.26.4-linux-x86_64.tar.gz
-                echo "CMake installed successfully."
+                # Install dependencies for building CMake
+                apt-get update && apt-get install -y build-essential libssl-dev
+
+                # Download and extract CMake source
+                curl -LO https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4.tar.gz
+                tar -xvf cmake-3.26.4.tar.gz
+                cd cmake-3.26.4
+
+                # Compile and install CMake
+                ./bootstrap --prefix=$WORKSPACE/cmake-bin
+                make -j$(nproc)
+                make install
+                cd ..
                 '''
             }
         }
 
-        stage('Debug PATH and Environment') {
+        stage('Debug PATH and CMake Version') {
             steps {
                 sh '''
                 echo "Current PATH: $PATH"
@@ -37,7 +45,6 @@ pipeline {
         stage('Configure and Build') {
             steps {
                 sh '''
-                echo "Configuring and Building..."
                 mkdir -p build
                 cd build
                 cmake ..
@@ -49,7 +56,6 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh '''
-                echo "Running Tests..."
                 cd build
                 ctest --verbose
                 '''
@@ -66,9 +72,6 @@ pipeline {
     post {
         always {
             echo 'Pipeline completed.'
-        }
-        success {
-            echo 'Pipeline succeeded!'
         }
         failure {
             echo 'Pipeline failed!'
