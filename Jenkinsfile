@@ -5,9 +5,8 @@ pipeline {
         stage('Install CMake') {
             steps {
                 sh '''
-                apt-get install wget
-                # Download and extract CMake
-                wget https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-x86_64.tar.gz
+                # Download and extract CMake using curl
+                curl -LO https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-x86_64.tar.gz
                 tar -xvf cmake-3.26.4-linux-x86_64.tar.gz
                 export PATH=$PWD/cmake-3.26.4-linux-x86_64/bin:$PATH
                 '''
