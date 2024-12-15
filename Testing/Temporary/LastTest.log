@@ -1,0 +1,29 @@
+Start testing: Dec 15 13:40 PST
+----------------------------------------------------------
+1/1 Testing: UtilsTests
+1/1 Test: UtilsTests
+Command: "/Users/gopuman/interview_prep/hello_cmake/tests/tests"
+Directory: /Users/gopuman/interview_prep/hello_cmake/tests
+"UtilsTests" start time: Dec 15 13:40 PST
+Output:
+----------------------------------------------------------
+Running main() from /Users/gopuman/interview_prep/hello_cmake/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from UtilsTest
+[ RUN      ] UtilsTest.PrintMessage
+[       OK ] UtilsTest.PrintMessage (0 ms)
+[----------] 1 test from UtilsTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.39 sec
+----------------------------------------------------------
+Test Passed.
+"UtilsTests" end time: Dec 15 13:40 PST
+"UtilsTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Dec 15 13:40 PST
