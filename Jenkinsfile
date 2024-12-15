@@ -20,6 +20,9 @@ pipeline {
                 # Download pre-built GCC binary (if needed)
                 curl -LO https://musl.cc/aarch64-linux-musl-cross.tgz
                 tar -xvf aarch64-linux-musl-cross.tgz --strip-components=1 -C $WORKSPACE/compiler
+
+                # Export PATH to include GCC binaries
+                export PATH=$WORKSPACE/compiler/bin:$PATH
                 '''
             }
         }
