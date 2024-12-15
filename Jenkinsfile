@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Checkout code from Git
-                git 'https://your-repo-url.git'
+                git 'https://github.com/gopuman/Jenkins-cmake-test/'
             }
         }
         stage('Configure and Build') {
