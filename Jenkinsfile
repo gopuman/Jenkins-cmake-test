@@ -2,26 +2,24 @@ pipeline {
     agent any
 
     environment {
-        PATH = "$WORKSPACE/cmake-bin:$PATH"
+        PATH = "$WORKSPACE/cmake-bin/bin:$WORKSPACE/compiler:$PATH"
     }
 
     stages {
-        stage('Install CMake from Source') {
+        stage('Prepare Environment') {
             steps {
                 sh '''
-                # Install dependencies for building CMake
-                apt-get update && apt-get install -y build-essential libssl-dev
+                # Create directories for binaries
+                mkdir -p $WORKSPACE/cmake-bin
+                mkdir -p $WORKSPACE/compiler
 
-                # Download and extract CMake source
-                curl -LO https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4.tar.gz
-                tar -xvf cmake-3.26.4.tar.gz
-                cd cmake-3.26.4
+                # Download pre-built CMake binary
+                curl -LO https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-aarch64.tar.gz
+                tar -xvf cmake-3.26.4-linux-aarch64.tar.gz --strip-components=1 -C $WORKSPACE/cmake-bin
 
-                # Compile and install CMake
-                ./bootstrap --prefix=$WORKSPACE/cmake-bin
-                make -j$(nproc)
-                make install
-                cd ..
+                # Download pre-built GCC binary (if needed)
+                curl -LO https://musl.cc/aarch64-linux-musl-cross.tgz
+                tar -xvf aarch64-linux-musl-cross.tgz --strip-components=1 -C $WORKSPACE/compiler
                 '''
             }
         }
@@ -32,6 +30,8 @@ pipeline {
                 echo "Current PATH: $PATH"
                 which cmake
                 cmake --version
+                which gcc
+                gcc --version
                 '''
             }
         }
