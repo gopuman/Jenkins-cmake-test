@@ -17,16 +17,13 @@ pipeline {
                 curl -LO https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-aarch64.tar.gz
                 tar -xvf cmake-3.26.4-linux-aarch64.tar.gz --strip-components=1 -C $WORKSPACE/cmake-bin
 
-                # Download pre-built GCC binary in .tar.gz format
+                # Download GCC pre-built in .tar.gz format
                 curl -LO https://developer.arm.com/-/media/Files/downloads/gnu/12.2-2022.09/binrel/gcc-arm-12.2-2022.09-x86_64-aarch64-none-linux-gnu.tar.gz
-                
-                # Extract .tar.gz (no xz dependency needed)
                 tar -xvf gcc-arm-12.2-2022.09-x86_64-aarch64-none-linux-gnu.tar.gz --strip-components=1 -C $WORKSPACE/compiler
 
-                # Debug
-                echo "Checking GCC setup"
-                ls -al $WORKSPACE/compiler/bin
-                export PATH=$WORKSPACE/compiler/bin:$PATH
+                # Debug paths
+                echo "PATH: $PATH"
+                which cmake
                 which gcc
                 gcc --version
                 '''
