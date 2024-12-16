@@ -17,15 +17,18 @@ pipeline {
                 curl -LO https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-aarch64.tar.gz
                 tar -xvf cmake-3.26.4-linux-aarch64.tar.gz --strip-components=1 -C $WORKSPACE/cmake-bin
 
-                # Download GCC pre-built in .tar.gz format
-                curl -LO https://developer.arm.com/-/media/Files/downloads/gnu/12.2-2022.09/binrel/gcc-arm-12.2-2022.09-x86_64-aarch64-none-linux-gnu.tar.gz
-                tar -xvf gcc-arm-12.2-2022.09-x86_64-aarch64-none-linux-gnu.tar.gz --strip-components=1 -C $WORKSPACE/compiler
+                # Download pre-built GCC binary from musl.cc
+                curl -LO https://musl.cc/aarch64-linux-musl-cross.tgz
+                tar -xvf aarch64-linux-musl-cross.tgz --strip-components=1 -C $WORKSPACE/compiler
 
-                # Debug paths
-                echo "PATH: $PATH"
-                which cmake
+                # Debug files
+                echo "Listing GCC directory:"
+                ls -al $WORKSPACE/compiler/bin
+
+                # Add GCC to PATH
+                export PATH=$WORKSPACE/compiler/bin:$PATH
                 which gcc
-                gcc --version
+                gcc --version || echo "GCC not executable"
                 '''
             }
         }
